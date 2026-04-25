@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TrueLens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aladin&family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Londrina+Sketch&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Stylish&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="background-scene" aria-hidden="true">
+        <span class="sky-glow sky-glow-left"></span>
+        <span class="sky-glow sky-glow-right"></span>
+        <span class="star star-one"></span>
+        <span class="star star-two"></span>
+        <span class="star star-three"></span>
+        <div class="ridge ridge-back"></div>
+        <div class="ridge ridge-front"></div>
+    </div>
+
+    <main class="page-shell">
+        <header class="brand-lockup">
+            <h1 class="site-title">TrueLens</h1>
+            <p class="brand-kicker">AI image authenticity check</p>
+            <p class="subtitle">Check whether an image feels real or AI-generated.</p>
+        </header>
+
+        <section class="hero-card">
+            <div class="hero-copy">
+                <h2>See the signal, not the noise.</h2>
+            </div>
+
+            <div class="preview-frame" id="previewFrame" hidden>
+                <img id="imagePreview" alt="Uploaded image preview">
+            </div>
+
+            <div class="upload-panel">
+                <input type="file" id="imageInput" accept="image/*" hidden>
+
+                <button class="primary-button" id="uploadButton" type="button">Upload Image</button>
+                <span class="file-name" id="fileName">No image selected</span>
+                <button class="secondary-button" id="checkButton" type="button">Tap to Check</button>
+            </div>
+
+            <section id="resultPanel" class="result-card" aria-live="polite" hidden>
+                <div class="result-header">
+                    <p class="result-kicker">Scan result</p>
+                    <h2 id="result" class="result-title"></h2>
+                </div>
+                <p id="explanation" class="result-copy"></p>
+
+                <div id="nextSteps" class="next-steps" hidden>
+                    <h3>What should you do next?</h3>
+                    <ul>
+                        <li>Avoid sharing if unsure</li>
+                        <li>Verify source</li>
+                        <li>Report suspicious content</li>
+                        <li>Be cautious with identity misuse</li>
+                    </ul>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
