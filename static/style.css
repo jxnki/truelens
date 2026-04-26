@@ -2,6 +2,16 @@
     box-sizing: border-box;
 }
 
+:root {
+    --shell-max-width: 880px;
+    --radius-xl: 34px;
+    --radius-lg: 26px;
+    --space-page-y: clamp(16px, 4vh, 30px);
+    --space-page-x: clamp(12px, 3vw, 22px);
+    --hero-pad-y: clamp(22px, 3.4vw, 34px);
+    --hero-pad-x: clamp(16px, 3.4vw, 30px);
+}
+
 html, body {
     margin: 0;
     min-height: 100%;
@@ -18,13 +28,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 30px 18px 42px;
+    min-height: 100dvh;
+    padding: var(--space-page-y) var(--space-page-x) calc(var(--space-page-y) + 12px);
     overflow-x: hidden;
 }
 
 .page-shell {
     width: 100%;
-    max-width: 880px;
+    max-width: var(--shell-max-width);
     position: relative;
     z-index: 2;
 }
@@ -116,10 +127,10 @@ body {
         linear-gradient(180deg, rgba(15, 23, 42, 0.68), rgba(8, 12, 24, 0.84)),
         radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent 42%);
     border: 1px solid rgba(148, 163, 184, 0.2);
-    border-radius: 34px;
+    border-radius: var(--radius-xl);
     box-shadow: 0 30px 90px rgba(2, 6, 23, 0.5);
     backdrop-filter: blur(20px);
-    padding: 34px 30px 28px;
+    padding: var(--hero-pad-y) var(--hero-pad-x) clamp(20px, 3vw, 28px);
     text-align: center;
     overflow: hidden;
 }
@@ -181,7 +192,7 @@ body {
     position: relative;
     z-index: 1;
     margin: 22px auto 0;
-    width: min(100%, 420px);
+    width: min(100%, 460px);
     border-radius: 24px;
     padding: 10px;
     background: linear-gradient(160deg, rgba(56, 189, 248, 0.16), rgba(15, 23, 42, 0.85));
@@ -206,11 +217,15 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 12px;
+    width: min(100%, 560px);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .file-name {
     margin: 0;
     min-height: 1.4em;
+    width: min(100%, 560px);
     color: #dbeafe;
     font-size: 0.95rem;
     letter-spacing: 0.02em;
@@ -219,6 +234,9 @@ body {
     border-radius: 999px;
     padding: 10px 16px;
     backdrop-filter: blur(10px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .primary-button,
@@ -229,6 +247,7 @@ body {
     padding: 15px 22px;
     font-size: 1rem;
     font-weight: 700;
+    min-height: 50px;
     cursor: pointer;
     transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease, filter 0.18s ease;
 }
@@ -261,7 +280,7 @@ body {
     margin-top: 26px;
     background: rgba(3, 7, 18, 0.72);
     border: 1px solid rgba(148, 163, 184, 0.18);
-    border-radius: 26px;
+    border-radius: var(--radius-lg);
     padding: 22px;
     text-align: left;
     overflow: hidden;
@@ -343,21 +362,117 @@ body {
     line-height: 1.8;
 }
 
-@media (max-width: 640px) {
-    body {
-        padding: 16px 12px 28px;
+@media (max-width: 1024px) {
+    :root {
+        --shell-max-width: 820px;
     }
 
-    .hero-card {
-        padding: 26px 16px 20px;
-        border-radius: 24px;
+    .ridge-back {
+        height: 36vh;
     }
 
-    .result-card {
-        padding: 20px 16px;
+    .ridge-front {
+        height: 28vh;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --radius-xl: 28px;
+        --radius-lg: 22px;
     }
 
     .brand-lockup {
         margin-bottom: 18px;
+    }
+
+    .subtitle {
+        font-size: 0.95rem;
+        line-height: 1.65;
+    }
+
+    .preview-frame {
+        border-radius: 20px;
+        padding: 8px;
+    }
+
+    .preview-frame img {
+        border-radius: 14px;
+    }
+}
+
+@media (max-width: 640px) {
+    body {
+        padding-bottom: calc(var(--space-page-y) + 8px);
+    }
+
+    .hero-card {
+        text-align: left;
+    }
+
+    .hero-copy,
+    .brand-lockup {
+        text-align: center;
+    }
+
+    .file-name,
+    .primary-button,
+    .secondary-button {
+        width: 100%;
+    }
+
+    .primary-button,
+    .secondary-button {
+        font-size: 0.98rem;
+        border-radius: 16px;
+    }
+
+    .result-card {
+        padding: 18px 14px;
+    }
+}
+
+@media (max-width: 420px) {
+    :root {
+        --radius-xl: 22px;
+        --radius-lg: 18px;
+        --space-page-x: 10px;
+    }
+
+    .site-title {
+        letter-spacing: 0.04em;
+    }
+
+    .hero-copy h2 {
+        line-height: 1.2;
+    }
+
+    .brand-kicker,
+    .result-kicker {
+        letter-spacing: 0.14em;
+        font-size: 0.76rem;
+    }
+
+    .next-steps ul {
+        padding-left: 18px;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    body {
+        align-items: flex-start;
+    }
+
+    .brand-lockup {
+        margin-bottom: 12px;
+    }
+
+    .hero-card {
+        padding-top: 18px;
+        padding-bottom: 18px;
+    }
+
+    .preview-frame {
+        width: min(100%, 340px);
     }
 }
