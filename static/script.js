@@ -58,6 +58,7 @@ function resetResult() {
     const result = document.getElementById("result");
     const explanation = document.getElementById("explanation");
     const nextSteps = document.getElementById("nextSteps");
+    const recommendationsList = document.getElementById("recommendationsList");
     const imagePreview = document.getElementById("imagePreview");
     const previewFrame = document.getElementById("previewFrame");
 
@@ -67,8 +68,28 @@ function resetResult() {
     result.classList.remove("is-ai", "is-real", "is-error");
     explanation.textContent = "";
     nextSteps.hidden = true;
+    recommendationsList.innerHTML = "";
     previewFrame.hidden = true;
     imagePreview.removeAttribute("src");
+}
+
+function renderRecommendations(items) {
+    const nextSteps = document.getElementById("nextSteps");
+    const recommendationsList = document.getElementById("recommendationsList");
+    recommendationsList.innerHTML = "";
+
+    if (!Array.isArray(items) || items.length === 0) {
+        nextSteps.hidden = true;
+        return;
+    }
+
+    items.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        recommendationsList.appendChild(li);
+    });
+
+    nextSteps.hidden = false;
 }
 
 function uploadImage() {
@@ -104,8 +125,10 @@ function uploadImage() {
         body: formData,
     })
         .then((res) => res.json())
-        .then((data) => {
-            console.log(data);
+        .then((payload) => {
+            console.log(payload);
+            const data = Array.isArray(payload) ? payload : payload?.detections;
+            const guidance = payload?.guidance;
 
             if (Array.isArray(data) && data.length > 0) {
                 const top = [...data].sort((a, b) => (b.score || 0) - (a.score || 0))[0];
@@ -117,10 +140,24 @@ function uploadImage() {
                 resultPanel.classList.add(`is-${resultState.tone}`);
                 result.classList.add(`is-${resultState.tone}`);
                 result.innerText = `${resultState.badge} (${score}%)`;
-                explanation.innerText = resultState.description;
-                nextSteps.hidden = resultState.tone !== "ai";
-            } else if (data && data.error) {
-                result.innerText = `Error: ${data.error}${data.detail ? ` - ${data.detail}` : ""}`;
+
+                const guidanceText = guidance?.explanation || resultState.description;
+                explanation.innerText = guidanceText;
+
+                if (Array.isArray(guidance?.safety_recommendations) && guidance.safety_recommendations.length > 0) {
+                    renderRecommendations(guidance.safety_recommendations);
+                } else if (resultState.tone === "ai") {
+                    renderRecommendations([
+                        "Avoid sharing the image until you verify where it came from.",
+                        "Check the original source and look for trusted reporting.",
+                        "If the image targets a person, be careful about identity misuse.",
+                        "Report suspicious content on the platform where you found it.",
+                    ]);
+                } else {
+                    renderRecommendations([]);
+                }
+            } else if (payload && payload.error) {
+                result.innerText = `Error: ${payload.error}${payload.detail ? ` - ${payload.detail}` : ""}`;
                 result.classList.add("is-error");
                 explanation.innerText = "";
                 nextSteps.hidden = true;
